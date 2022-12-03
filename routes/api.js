@@ -89,8 +89,9 @@ router.get("/projects", ensureAuth, async (req, res) => {
   const projectsPerPage = 5;
   try {
     let projects = await Project.find({ devs: req.dev.id })
-      .populate("devs")
-      .select(" -_id -email -password -location -createdAt -updatedAt")
+    .lean()
+      .populate('devs','name job_title')
+      // .select(" -_id -email -password -location -createdAt -updatedAt")
       .skip(pages * projectsPerPage)
       .limit(projectsPerPage);
     if (!projects) {
