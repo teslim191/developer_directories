@@ -66,11 +66,9 @@ router.post("/login", async (req, res) => {
       res.status(400).json({ message: "Email or Password incorrect" });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ error: "server error" });
   }
 });
-
-
 
 module.exports = router;

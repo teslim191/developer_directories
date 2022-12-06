@@ -25,8 +25,8 @@ const DevSchema = new mongoose.Schema(
     },
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project'
-    }
+      ref: "Project",
+    },
   },
   {
     timestamps: true,

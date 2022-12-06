@@ -3,6 +3,9 @@ const dotenv = require('dotenv')
 const app = express()
 const cors = require('cors')
 const connectDB = require('./config/db')
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
+const yaml = require('yamljs')
 // to work with environment variables
 dotenv.config({path: 'config/config.env'})
 
@@ -14,6 +17,9 @@ app.use(cors())
 
 connectDB()
 
+// swagger ui
+const swaggerDefinition = yaml.load("./swagger.yaml")
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDefinition))
 
 // routes middleware
 app.use('/auth', require('./routes/auth'))

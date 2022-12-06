@@ -12,7 +12,7 @@ router.get("/me", ensureAuth, async (req, res) => {
     res.status(200).json({
       name: dev.name,
       email: dev.email,
-      job_title: dev.job_title
+      job_title: dev.job_title,
     });
   } catch (error) {
     res.status(500).json({ error: "server error" });
@@ -50,7 +50,7 @@ router.get("/developer/:id", ensureAuth, async (req, res) => {
       res.status(200).json(dev);
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -80,7 +80,7 @@ router.post("/project", ensureAuth, async (req, res) => {
       dev: req.dev.name,
     });
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -91,7 +91,7 @@ router.get("/projects/all", ensureAuth, async (req, res) => {
   try {
     let projects = await Project.find()
       .lean()
-      .sort({ createdAt: -1 }) 
+      .sort({ createdAt: -1 })
       .populate("dev", "name job_title")
       // .select(" -_id -email -password -location -createdAt -updatedAt")
       .skip(pages * projectsPerPage)
@@ -104,7 +104,7 @@ router.get("/projects/all", ensureAuth, async (req, res) => {
       // console.log(posts)
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -128,7 +128,7 @@ router.get("/projects", ensureAuth, async (req, res) => {
       // console.log(posts)
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -152,17 +152,21 @@ router.get("/project/:id", ensureAuth, async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 // edit a developer detail
-router.patch("/developer/:id", ensureAuth, async (req, res) => {
+router.put("/developer/:id", ensureAuth, async (req, res) => {
   try {
     let dev = await Dev.findById({ _id: req.params.id });
     if (!dev) {
       res.status(404).json({ error: "this developer does not exist" });
     } else if (req.dev.id != dev._id) {
-      res.status(400).json({ error: "you are not authorized to edit this developer details" });
+      res
+        .status(400)
+        .json({
+          error: "you are not authorized to edit this developer details",
+        });
     } else {
       dev = await Dev.findByIdAndUpdate({ _id: req.params.id }, req.body, {
         new: true,
@@ -171,7 +175,7 @@ router.patch("/developer/:id", ensureAuth, async (req, res) => {
       res.status(201).json(dev);
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -182,29 +186,39 @@ router.delete("/developer/:id", ensureAuth, async (req, res) => {
     if (!dev) {
       res.status(404).json({ error: "developer does not exist" });
     } else if (req.dev.id != dev._id) {
-      res.status(400).json({ error: "you are not authorized to delete this developer" });
+      res
+        .status(400)
+        .json({ error: "you are not authorized to delete this developer" });
     } else {
       dev = await Dev.findByIdAndDelete({ _id: req.params.id });
       res.status(200).json({ message: dev.name + " deleted succesfully" });
     }
   } catch (error) {
-    res.status(500).json({error: 'server error'})
+    res.status(500).json({ error: "server error" });
   }
 });
 
 // edit a project
 router.patch("/project/:id", ensureAuth, async (req, res) => {
   try {
-    let project = await Project.findById({ _id: req.params.id }).populate("dev");
+    let project = await Project.findById({ _id: req.params.id }).populate(
+      "dev"
+    );
     if (!project) {
       res.status(404).json({ error: "this project does not exist" });
     } else if (req.dev.id != project.dev._id) {
-      res.status(400).json({ error: "you are not authorized to edit this project details" });
+      res
+        .status(400)
+        .json({ error: "you are not authorized to edit this project details" });
     } else {
-      project = await Project.findByIdAndUpdate({ _id: req.params.id }, req.body, {
-        new: true,
-        runValidators: true,
-      });
+      project = await Project.findByIdAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
       res.status(201).json({
         title: project.title,
         tool: project.tool,
@@ -215,7 +229,7 @@ router.patch("/project/:id", ensureAuth, async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     // res.status(500).json({error: 'server error'})
   }
 });
@@ -223,18 +237,24 @@ router.patch("/project/:id", ensureAuth, async (req, res) => {
 // delete a project
 router.delete("/project/:id", ensureAuth, async (req, res) => {
   try {
-    let project = await Project.findById({ _id: req.params.id }).populate('dev');
+    let project = await Project.findById({ _id: req.params.id }).populate(
+      "dev"
+    );
     if (!project) {
       res.status(404).json({ error: "project does not exist" });
     } else if (req.dev.id != project.dev._id) {
-      res.status(400).json({ error: "you are not authorized to delete this project document" });
+      res
+        .status(400)
+        .json({
+          error: "you are not authorized to delete this project document",
+        });
     } else {
       project = await Project.findByIdAndDelete({ _id: req.params.id });
-      res.status(200).json({ message: project.title+" deleted succesfully" });
+      res.status(200).json({ message: project.title + " deleted succesfully" });
     }
   } catch (error) {
     // console.log(error)
-    res.status(500).json({error: 'server error'});
+    res.status(500).json({ error: "server error" });
   }
 });
 
@@ -248,33 +268,5 @@ router.delete("/project/:id", ensureAuth, async (req, res) => {
 //     }
 //   ])
 // })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

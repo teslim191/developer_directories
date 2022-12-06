@@ -1,0 +1,316 @@
+openapi: 3.0.0
+info:
+  title: GTB Tech Academy NodeJS
+  description: MongoDB ExpressJS NodeJS RESTAPI
+  version: 1.0.0
+servers:
+  - url: http://localhost:7000/
+    description:
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Dev:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        job_title:
+          type: string
+        location:
+          type: string
+
+    Project:
+      type: object
+      properties:
+        title: 
+          type: string
+        tool:
+          type: array
+        start_date: 
+          type: string
+        end_state:
+          type: string
+        duration:
+          type: number
+
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new Developer
+      description: Register a new Developer in the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dev"  
+
+      responses:
+        201:
+          description: Developer created succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  _id:
+                    type: string
+
+  /auth/login:
+    post:
+      summary: Login a Developer
+      description: Login a Developer in order to get JWT token (auth-token)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        200:
+          description: Developer logged in succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  data:
+                    type: string
+
+  /api/me:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Dashboard of the developer
+      description: Get details of login developer
+      responses:
+        200:
+          description: The details of the login developer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  job_title:
+                    type: string
+
+  /api/developers:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves a list of all registered developers 
+      description: Retrieves a list of developers as JSON objects.
+      responses:
+        200:
+          description: A list of developers JSON objects in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dev"
+
+  /api/developer/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves a Specific Developer
+      description: Retrieves a specific Developer based on it's id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A Developer in the format of a JSON object.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Dev"
+
+    put:
+      security:
+        - bearerAuth: []
+      summary: Updates a specific Developer detail
+      description: Updates a specific Developer based on id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dev"
+
+      responses:
+        201:
+          description: Developer detail updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dev"
+
+
+
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Deletes a specific Developer
+      description: Deletes a specific Developer based on it's id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+
+      responses:
+        201:
+          description: Developer deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dev"
+
+  /api/project:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a new Project
+      description: Create a new Project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        201:
+          description: Project created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /api/projects/all:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves all Projects .
+      description: Retrieves all Projects if there is any available.
+      responses:
+        200:
+          description: A list of Projects in the format of a JSON object.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+
+  /api/project/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves a Specific Project
+      description: Retrieves a specific Project based on it's id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A Project in the format of a JSON object.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Project"
+
+    put:
+      security:
+        - bearerAuth: []
+      summary: Updates a specific Project
+      description: Updates a specific Project based on it's id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+
+      responses:
+        201:
+          description: Project updated succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Deletes a specific Project
+      description: Deletes a specific Project based on it's id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: MongoDB id
+          schema:
+            type: string
+
+      responses:
+        201:
+          description: Project deleted succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+
