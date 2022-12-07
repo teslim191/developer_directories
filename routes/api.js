@@ -4,6 +4,7 @@ const Dev = require("../models/Dev");
 const { ensureAuth } = require("../middleware/auth");
 const Project = require("../models/Project");
 const moment = require("moment");
+const { aggregate } = require("../models/Project");
 
 // get current loggedin developer
 router.get("/me", ensureAuth, async (req, res) => {
@@ -260,7 +261,7 @@ router.delete("/project/:id", ensureAuth, async (req, res) => {
 
 // get stats
 router.get('/stats', async(req, res) => {
-  let stats = await Project.aggregate([{$group:{_id:"$duration", Total:{$sum:1}}}])
+  let stats = await Project.find().sort({"duration": -1}).limit(1)
   res.status(200).json(stats)
 })
 // router.get('/stats', async (req, res) => {

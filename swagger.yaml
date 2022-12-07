@@ -4,7 +4,7 @@ info:
   description: MongoDB ExpressJS NodeJS RESTAPI
   version: 1.0.0
 servers:
-  - url: https://teslim-esther.onrender.com
+  - url: http://localhost:7000
     description:
 components:
   securitySchemes:
@@ -315,8 +315,8 @@ paths:
     get:
       security:
         - bearerAuth: []
-      summary: Retrieves all Project .
-      description: Retrieves all Projects if there is any available.
+      summary: Retrieves the project with the maximum duration.
+      description: Retrieves the project with the maximum duration.
       responses:
         200:
           description: A list of Projects in the format of a JSON object.
