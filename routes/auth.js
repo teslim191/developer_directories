@@ -3,11 +3,12 @@ const router = express.Router();
 const Dev = require("../models/Dev");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { ensureAuth } = require("../middleware/auth");
 
 // generate a token for a developer
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN, {
-    expiresIn: "30d",
+    expiresIn: "15m",
   });
 };
 
@@ -69,6 +70,28 @@ router.post("/login", async (req, res) => {
     console.log(error);
     res.status(500).json({ error: "server error" });
   }
+});
+
+// logout a developer
+router.put("/logout", (req, res) => {
+  // check if request is valid
+  const authHeader = req.headers["authorization"];
+
+  // replace JWT token with blank string and expires in 1 second
+  jwt.sign(
+    authHeader,
+    "",
+    {
+      expiresIn: 1,
+    },
+    (logout, err) => {
+      if (logout) {
+        res.status(200).json({ message: "You have successfully logged out" });
+      } else {
+        console.log(err);
+      }
+    }
+  );
 });
 
 module.exports = router;

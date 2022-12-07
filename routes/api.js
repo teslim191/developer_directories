@@ -114,7 +114,7 @@ router.get("/projects", ensureAuth, async (req, res) => {
   const projectsPerPage = 5;
   try {
     let projects = await Project.find({ dev: req.dev.id })
-      .lean()
+      .lean() 
       .sort({ createdAt: -1 })
       .populate("dev", "name job_title")
       // .select(" -_id -email -password -location -createdAt -updatedAt")
@@ -199,7 +199,7 @@ router.delete("/developer/:id", ensureAuth, async (req, res) => {
 });
 
 // edit a project
-router.patch("/project/:id", ensureAuth, async (req, res) => {
+router.put("/project/:id", ensureAuth, async (req, res) => {
   try {
     let project = await Project.findById({ _id: req.params.id }).populate(
       "dev"
