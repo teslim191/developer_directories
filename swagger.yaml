@@ -311,7 +311,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Project"
 
-  /api/stat:
+  /api/stats:
     get:
       security:
         - bearerAuth: []
