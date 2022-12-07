@@ -31,11 +31,11 @@ components:
     Project:
       type: object
       properties:
-        title: 
+        title:
           type: string
         tool:
           type: array
-        start_date: 
+        start_date:
           type: string
         end_state:
           type: string
@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Dev"  
+              $ref: "#/components/schemas/Dev"
 
       responses:
         201:
@@ -121,7 +121,7 @@ paths:
     get:
       security:
         - bearerAuth: []
-      summary: Retrieves a list of all registered developers 
+      summary: Retrieves a list of all registered developers
       description: Retrieves a list of developers as JSON objects.
       responses:
         200:
@@ -182,8 +182,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Dev"
-
-
 
     delete:
       security:
@@ -313,4 +311,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Project"
 
-
+  /api/stat:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieves all Project .
+      description: Retrieves all Projects if there is any available.
+      responses:
+        200:
+          description: A list of Projects in the format of a JSON object.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Project"

@@ -259,6 +259,10 @@ router.delete("/project/:id", ensureAuth, async (req, res) => {
 });
 
 // get stats
+router.get('/stats', async(req, res) => {
+  let stats = await Project.aggregate([{$group:{_id:"$duration", Total:{$sum:1}}}])
+  res.status(200).json(stats)
+})
 // router.get('/stats', async (req, res) => {
 //   let stats = await Project.aggregate([
 //     {
