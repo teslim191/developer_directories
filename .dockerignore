@@ -1,6 +1,7 @@
 node_modules
 .git
 .env
+config/config.env
 .gitignore
 .DS_Store
 npm-debug.log
