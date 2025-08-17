@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 7000
 
 # Command to run the app
-CMD["node","index.js"]
+CMD ["node","index.js"]
