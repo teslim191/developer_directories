@@ -6,3 +6,4 @@ using JWToken and swagger-UI with RESTAPI
 3. create a config.env file add a mongo uri connection string and a secret token for auth
 4. run npm run dev to run server
 5. go to http://localhost:7000/api-docs
+6. consequently, you can navigate to the production URL: https://teslim-esther.onrender.com/api-docs/
