@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: GTB Tech Academy NodeJS
+  title: DEVELOPER DIRECTORY API
   description: MongoDB ExpressJS NodeJS RESTAPI
   version: 1.0.0
 servers:
